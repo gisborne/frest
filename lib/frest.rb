@@ -27,10 +27,12 @@ class RubyFn
       rescue
         nil
       end
+    else
+      true
     end
   end
 
   def call *path, **args
-    @fn.call *path, **args
+    @fn.call *path, context: self, **args
   end
 end

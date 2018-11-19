@@ -9,7 +9,7 @@ module StringCall
     end
 
     def load(**args)
-      FREST::RubyLoader.load(self, **args)
+      FREST::RubyLoader.load(path: self, **args)
     end
   end
 end

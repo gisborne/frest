@@ -6,7 +6,7 @@ require 'ruby_loader'
 require 'rack'
 require 'uri'
 
-f = FREST.defn(
+FREST.defn(
   arg_types:   {
     context: 'context',
     port:    'integer'
@@ -17,7 +17,7 @@ f = FREST.defn(
                  **_
                ) { true }
 ) do |
-port: 8493,
+  port: 8493,
   context:,
   **c|
 
@@ -25,6 +25,7 @@ port: 8493,
     req          = Rack::Request.new(env)
     path         = req.path_info.split('/')
     result, code = context.call(*path, **c) || ''
+
     code ||= 200
 
     if result.respond_to? :each

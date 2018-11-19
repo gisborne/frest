@@ -13,7 +13,7 @@ http          = 'http'          .load
 sqlite        = 'sqlite'        .load
 ruby_loader   = 'ruby_context'  .load
 null_context  = 'null_context'  .load
-user          = 'user_context'  .load
+user          = 'user'          .load
 
 merge         = 'merge_contexts'.load
 

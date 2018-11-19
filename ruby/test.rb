@@ -1,6 +1,6 @@
 using StringCall
 
-Saturday, October 27, 18REST.defn(
+FREST.defn(
   arg_types:   {
     context: 'context',
     port:    'integer'
@@ -14,5 +14,5 @@ Saturday, October 27, 18REST.defn(
   |
   **_ |
 
-  :foo
+  'foo'
 end
