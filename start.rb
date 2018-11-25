@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env source
 
 require 'pathname'
 require 'fileutils'
@@ -11,7 +11,7 @@ require 'frest'
 
 http          = 'http'          .load
 sqlite        = 'sqlite'        .load
-ruby_loader   = 'ruby_context'  .load
+file_loader   = 'ruby_context'  .load
 null_context  = 'null_context'  .load
 user          = 'user'          .load
 
@@ -20,7 +20,7 @@ merge         = 'merge_contexts'.load
 handler = merge.(
   from: [
     user,
-    ruby_loader,
+    file_loader,
     sqlite,
     null_context
   ]

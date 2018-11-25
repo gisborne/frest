@@ -5,7 +5,7 @@ class BaseContext
     @functions = {}
 
     def start
-      Dir.foreach File.expand_path("../ruby", __FILE__) { |f| BaseContext.ingest f }
+      Dir.foreach File.expand_path("../source", __FILE__) { |f| BaseContext.ingest f }
     end
 
     def ingest f, rel_path: '', **_
@@ -28,9 +28,9 @@ class BaseContext
       fn_name = fn_path.last
 
       if fn_name =~ /\.rb$/
-        actual_path = File.join(File.dirname(__FILE__), "../../../ruby/#{fn_path.join('/')}")
+        actual_path = File.join(File.dirname(__FILE__), "../../../source/#{fn_path.join('/')}")
       else
-        actual_path = File.join(File.dirname(__FILE__), "../../../ruby/#{fn_path.join('/')}.rb")
+        actual_path = File.join(File.dirname(__FILE__), "../../../source/#{fn_path.join('/')}.rb")
       end
 
       thread          = Thread.current

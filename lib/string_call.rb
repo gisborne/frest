@@ -2,14 +2,14 @@ module StringCall
   refine String do
     def call(**args)
       begin
-        FREST::RubyLoader.call(self, **args)
+        FREST::FileLoader.call(path: self, **args)
       rescue Exception => e
         raise e
       end
     end
 
     def load(**args)
-      FREST::RubyLoader.load(path: self, **args)
+      FREST::FileLoader.load(path: self, **args)
     end
   end
 end

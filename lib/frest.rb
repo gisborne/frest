@@ -1,6 +1,6 @@
 using StringCall
 
-require 'ruby_loader'
+require 'file_loader'
 
 module FREST
   module_function

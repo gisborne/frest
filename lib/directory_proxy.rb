@@ -11,7 +11,7 @@ FREST.defn(
   context:,
   **_ |
 
-  FREST::RubyLoader.load(
+  FREST::FileLoader.load(
     path: path
   )&.()
 end

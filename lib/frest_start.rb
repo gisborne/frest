@@ -32,7 +32,7 @@ module FREST
       private
 
       def load_all_the_things
-        Dir.glob 'ruby/**/*.rb' do |f|
+        Dir.glob 'source/**/*.rb' do |f|
           require Dir.f
         end
       end
