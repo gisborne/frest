@@ -19,8 +19,9 @@ module FREST
       source_path: nil,
       **_
     )
-      return 'root'.load if path == []
       return @@cache[path] if @@cache[path]
+      return 'root'.load if path.empty?
+
       source_paths = source_path ? [source_path] : [DEFAULT_SOURCE_PATH, DEFAULT_WEAK_SOURCE_PATH]
 
       source_paths.each do |current_path|
@@ -32,9 +33,9 @@ module FREST
         )
 
         result = load_from_filesystem(
-            path:        path,
-            source_path: current_path
-          )
+          path:        path,
+          source_path: current_path
+        )
 
         if result
           @@cache[path] ||= result
@@ -51,7 +52,7 @@ module FREST
     end
 
 
-    # private
+    # private — can't call canonicalize_path from above when private?
 
     def canonicalize_path(path)
       if path.first == ''
@@ -81,12 +82,12 @@ module FREST
 
       maybe_load_ruby_file(
         source_path: source_path,
-        path:   path,
-        thread: thread
+        path:        path,
+        thread:      thread
       ) ||
         maybe_load_other_file(
           source_path: source_path,
-          path: path
+          path:        path
         ) ||
         nil
     end
@@ -96,11 +97,18 @@ module FREST
       thread:,
       path:
     )
-      final_path = File.join source_path, path
-
       return unless ruby_file? path
 
-      loaded = require_path final_path rescue nil
+      pth = File.join(source_path, path)
+
+      # if (File.extname(path.last) == '') && (File.directory? pth)
+      #   final_path = pth
+      # else
+      #   final_path = File.join(source_path, path) + '.rb'
+      # end
+      #
+      loaded = require_path pth rescue nil
+
       if loaded
         fn = thread[:new_fn]
 
@@ -119,7 +127,7 @@ module FREST
 
       asset_path = File.join('assets', *p)
       if File.file?(asset_path)
-        return ->(){File.binread asset_path}
+        return ->() { File.binread asset_path }
       else
         nil
       end
@@ -129,7 +137,8 @@ module FREST
     def require_path(
       path
     )
-      require_relative final_path(path) rescue nil
+      f = final_path(path)
+      require_relative f if File.exist?(f) rescue nil
     end
 
     def ruby_file? path
@@ -154,6 +163,8 @@ module FREST
       else
         path += '.rb' if File.extname(path) == ''
       end
+
+      path
     end
 
     Thread.new do

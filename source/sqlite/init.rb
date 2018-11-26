@@ -1,4 +1,4 @@
-require 'sqlite'
+require 'sqlite3'
 
 f = SQLite3::Database.new 'frest.sqlite'
 
