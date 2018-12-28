@@ -28,7 +28,8 @@ class ContextMerger
     @contexts.each do |cont|
       result = cont.call(
         *path,
-        **(c.merge mode: :weak)
+        mode: :weak,
+        **c
       )
       return result if result
     end

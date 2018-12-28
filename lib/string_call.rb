@@ -2,7 +2,7 @@ module StringCall
   refine String do
     def call(**args)
       begin
-        FREST::FileLoader.call(path: self, **args)
+        FREST::FileLoader.call(**(args.merge(path: self)))
       rescue Exception => e
         raise e
       end

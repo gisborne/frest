@@ -4,10 +4,11 @@ require 'listen'
 
 module FREST
   module FileLoader
-    DEFAULT_SOURCE_PATH      = File.expand_path(__dir__ + '/../source')
-    DEFAULT_WEAK_SOURCE_PATH = File.expand_path(__dir__ + '/../source_weak')
-    DIRECTORY_PROXY          = File.expand_path(__dir__ + '/../lib/directory_proxy.rb')
-    ROOT_FILE_NAME           = 'self'
+    DEFAULT_SOURCE_PATH       = File.expand_path(__dir__ + '/../source')
+    DEFAULT_WEAK_SOURCE_PATH  = File.expand_path(__dir__ + '/../source_weak')
+    DEFAULT_PATHS             = [DEFAULT_SOURCE_PATH, DEFAULT_WEAK_SOURCE_PATH]
+    DIRECTORY_PROXY           = File.expand_path(__dir__ + '/../lib/directory_proxy.rb')
+    ROOT_FILE_NAME            = 'self'
 
     @@cache = {}
 
@@ -19,10 +20,10 @@ module FREST
       source_path: nil,
       **_
     )
-      return @@cache[path] if @@cache[path]
-      return 'root'.load if path.empty?
+      return @@cache[path]        if @@cache[path]
+      return ROOT_FILE_NAME.load  if path.empty?
 
-      source_paths = source_path ? [source_path] : [DEFAULT_SOURCE_PATH, DEFAULT_WEAK_SOURCE_PATH]
+      source_paths = source_path ? [source_path] : DEFAULT_PATHS
 
       source_paths.each do |current_path|
         path = canonicalize_path([*path])
@@ -97,9 +98,11 @@ module FREST
       thread:,
       path:
     )
-      return unless ruby_file? path
-
       pth = File.join(source_path, path)
+      return @@cache[pth] if @@cache[pth]
+
+      return unless ruby_file? pth
+
 
       # if (File.extname(path.last) == '') && (File.directory? pth)
       #   final_path = pth
@@ -112,7 +115,7 @@ module FREST
       if loaded
         fn = thread[:new_fn]
 
-        return (@@cache[path] = fn) if fn
+        return (@@cache[pth] = fn) if fn
       else
         false
       end
@@ -127,7 +130,7 @@ module FREST
 
       asset_path = File.join('assets', *p)
       if File.file?(asset_path)
-        return ->() { File.binread asset_path }
+        return ->(*b, **c) { File.binread asset_path }
       else
         nil
       end
@@ -144,7 +147,7 @@ module FREST
     def ruby_file? path
       return false if path.empty?
 
-      ext = File.extname(path.last)
+      ext = File.extname(path)
       ext == '.rb' || ext == ''
     end
 

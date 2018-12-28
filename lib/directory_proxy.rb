@@ -9,9 +9,10 @@ FREST.defn(
 ) do|
   *path,
   context:,
-  **_ |
+  **c |
 
-  FREST::FileLoader.load(
-    path: path
-  )&.()
+  result = FREST::FileLoader.load(
+    **(c.merge path: path)
+  )
+  result&.(**c)
 end
